@@ -173,7 +173,6 @@ async function handleFileUpload(request, env) {
   if (!contentType.toLowerCase().includes("multipart/form-data")) {
     return json({ error: "Expected multipart/form-data" }, 400);
   }
-
   const formData = await request.formData();
   const file = formData.get("file");
 
@@ -181,22 +180,20 @@ async function handleFileUpload(request, env) {
     return json({ error: "Missing file field" }, 400);
   }
 
-  const bytes = new Uint8Array(await file.arrayBuffer());
   const id = crypto.randomUUID();
   const now = Date.now();
 
-  await env.DB_FILES.prepare(
-    `INSERT INTO files (id, filename, mime, data, createdAt)
-     VALUES (?1, ?2, ?3, ?4, ?5)`
-  )
-    .bind(
-      id,
-      file.name || "",
-      file.type || "application/octet-stream",
-      bytes,
-      now
-    )
-    .run();
+  const body = await file.arrayBuffer();
+  const contentTypeFile = file.type || "application/octet-stream";
+  const filename = file.name || "";
+
+  // เก็บไฟล์ลง R2
+  await env.R2_FILES.put(id, body, {
+    httpMetadata: {
+      contentType: contentTypeFile,
+      contentDisposition: `inline; filename="${filename || id}"`,
+    },
+  });
 
   const url = new URL(request.url);
   url.pathname = `/files/${id}`;
@@ -221,25 +218,21 @@ async function handleFileServe(request, env) {
     return new Response("Not found", { status: 404 });
   }
 
-  const row = await env.DB_FILES.prepare(
-    "SELECT data, mime, filename FROM files WHERE id = ?1"
-  )
-    .bind(id)
-    .first();
+  const object = await env.R2_FILES.get(id);
 
-  if (!row) {
+  if (!object) {
     return new Response("Not found", { status: 404 });
   }
 
   const headers = new Headers();
-  headers.set("Content-Type", row.mime || "application/octet-stream");
-  headers.set(
-    "Content-Disposition",
-    `inline; filename="${row.filename || id}"`
-  );
+  const httpMeta = object.httpMetadata || {};
+  headers.set("Content-Type", httpMeta.contentType || "application/octet-stream");
+  if (httpMeta.contentDisposition) {
+    headers.set("Content-Disposition", httpMeta.contentDisposition);
+  }
   headers.set("Cache-Control", "public, max-age=31536000, immutable");
 
-  return new Response(row.data, { status: 200, headers });
+  return new Response(object.body, { status: 200, headers });
 }
 
 async function readJson(request) {

@@ -9,15 +9,12 @@ binding = "ASSETS"
 run_worker_first = true
 not_found_handling = "single-page-application"
 
-# Replace these with your real database names and IDs from Cloudflare
-
 [[d1_databases]]
 binding = "DB_PRODUCTS"
 database_name = "autoparts-products"
 database_id = "YOUR_D1_DATABASE_ID_HERE"
 
-[[d2_databases]]
-binding = "DB_FILES"
-database_name = "autoparts-files"
-database_id = "YOUR_D2_DATABASE_ID_HERE"
+[r2_buckets]
+binding = "R2_FILES"
+bucket_name = "autoparts-files"
 

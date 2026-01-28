@@ -1,4 +1,4 @@
--- D1: Products table
+-- D1: Products table (สำหรับเก็บข้อมูลสินค้า)
 CREATE TABLE IF NOT EXISTS products (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -13,13 +13,4 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 CREATE INDEX IF NOT EXISTS idx_products_createdAt ON products (createdAt DESC);
-
--- D2: Files table (for storing images/files)
-CREATE TABLE IF NOT EXISTS files (
-  id TEXT PRIMARY KEY,
-  filename TEXT,
-  mime TEXT,
-  data BYTEA,
-  createdAt INTEGER NOT NULL
-);
 
