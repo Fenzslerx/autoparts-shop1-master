@@ -73,7 +73,7 @@ const Marketplace = () => {
 
       {/* Hero Banner with Image */}
       <div 
-        className="relative py-40 bg-cover bg-center overflow-hidden"
+        className="relative py-12 md:py-24 bg-cover bg-center overflow-hidden"
         style={{
           backgroundImage: `url(${headerImage})`,
           backgroundSize: 'cover',
@@ -85,32 +85,32 @@ const Marketplace = () => {
         
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
           {/* Subtitle Badge */}
-          <div className="mb-6 inline-block">
-            <span className="px-6 py-2 bg-gradient-to-r from-indigo-500/40 to-purple-500/40 backdrop-blur-md rounded-full border border-indigo-300/30 text-indigo-100 font-semibold text-sm tracking-wider">
+          <div className="mb-3 md:mb-6 inline-block">
+            <span className="px-4 md:px-6 py-2 bg-gradient-to-r from-indigo-500/40 to-purple-500/40 backdrop-blur-md rounded-full border border-indigo-300/30 text-indigo-100 font-semibold text-xs md:text-sm tracking-wider">
               ✨ ร้านอะไหล่รถยนต์ที่เชื่อถือได้
             </span>
           </div>
 
           {/* Main Heading */}
-          <h2 className="text-6xl md:text-7xl font-black mb-6 text-white drop-shadow-2xl leading-tight">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-3 md:mb-6 text-white drop-shadow-2xl leading-tight">
             ช.โชคชัยรถยก อะไหล่รถยนต์
             <br />
           </h2>
 
           {/* Subtitle */}
-          <p className="text-2xl md:text-3xl text-gray-100 mb-3 font-semibold drop-shadow-lg max-w-3xl mx-auto">
+          <p className="text-lg md:text-2xl lg:text-3xl text-gray-100 mb-2 md:mb-3 font-semibold drop-shadow-lg max-w-3xl mx-auto">
             อะไหล่แท้ • มือสอง • คุณภาพดี • ราคาถูก
           </p>
           
           {/* Description */}
-          <p className="text-lg md:text-xl text-gray-200 drop-shadow-md mb-10 max-w-2xl mx-auto font-light">
+          <p className="text-sm md:text-lg lg:text-xl text-gray-200 drop-shadow-md mb-6 md:mb-10 max-w-2xl mx-auto font-light">
             รับประกันสินค้า ✓ ส่งทันที ✓ มีประกัน ✓ ลูกค้าเชื่อถือ
           </p>
 
           {/* CTA Button */}
           <a 
             href="#products"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-lg rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
+            className="inline-block px-6 md:px-10 py-3 md:py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-base md:text-lg rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
           >
             ดูสินค้าทั้งหมด →
           </a>
@@ -174,7 +174,7 @@ const Marketplace = () => {
         <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8' : 'space-y-4'}>
           {filteredParts.map((part) => (
             <div
-              key={part.id}
+              key={part._id}
               onClick={() => setSelectedPart(part)}
               className={`${
                 viewMode === 'grid'

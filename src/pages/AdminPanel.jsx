@@ -32,9 +32,9 @@ const AdminPanel = () => {
   // Stats
   const stats = {
     totalProducts: products.length,
-    inStock: products.filter(p => p.stock.includes('พร้อมส่ง')).length,
-    lowStock: products.filter(p => p.stock.includes('เหลือ')).length,
-    totalValue: products.reduce((sum, p) => sum + parseInt(p.price.replace(',', '')), 0)
+    inStock: products.filter(p => p.stock && p.stock > 0).length,
+    lowStock: products.filter(p => p.stock && p.stock > 0 && p.stock < 5).length,
+    totalValue: products.reduce((sum, p) => sum + (parseInt(p.price) || 0), 0)
   };
 
   // Handle Login
@@ -58,28 +58,51 @@ const AdminPanel = () => {
   };
 
   // Handle Add/Edit Product
-  const handleSaveProduct = () => {
-    if (editingProduct) {
-      // Update existing product
-      updateProduct({ ...productForm, id: editingProduct.id, createdAt: editingProduct.createdAt });
-    } else {
-      // Add new product
-      addProduct(productForm);
+  const handleSaveProduct = async () => {
+    try {
+      // Validate required fields
+      if (!productForm.name || !productForm.price || !productForm.carModel) {
+        alert('กรุณากรอกข้อมูลที่จำเป็น: ชื่อ, ราคา, รุ่นรถ');
+        return;
+      }
+
+      const dataToSave = {
+        ...productForm,
+        price: parseInt(productForm.price) || 0,
+        stock: parseInt(productForm.stock) || 0,
+        images: Array.isArray(productForm.images) ? productForm.images : []
+      };
+
+      if (editingProduct) {
+        // Update existing product
+        await updateProduct({ 
+          ...dataToSave, 
+          _id: editingProduct._id, 
+          createdAt: editingProduct.createdAt 
+        });
+      } else {
+        // Add new product
+        await addProduct(dataToSave);
+      }
+      
+      // Reset form
+      setProductForm({
+        name: '',
+        price: '',
+        condition: '',
+        carModel: '',
+        images: [],
+        description: '',
+        stock: '',
+        category: ''
+      });
+      setIsEditing(false);
+      setEditingProduct(null);
+      alert('บันทึกสินค้าสำเร็จ!');
+    } catch (error) {
+      alert('เกิดข้อผิดพลาด: ' + error.message);
+      console.error(error);
     }
-    
-    // Reset form
-    setProductForm({
-      name: '',
-      price: '',
-      condition: '',
-      carModel: '',
-      images: [],
-      description: '',
-      stock: '',
-      category: ''
-    });
-    setIsEditing(false);
-    setEditingProduct(null);
   };
 
   // Handle Edit
@@ -270,6 +293,11 @@ const AdminPanel = () => {
                 <h3 className="text-xl font-bold text-gray-800">
                   {editingProduct ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่'}
                 </h3>
+                {editingProduct && (
+                  <div className="text-sm text-gray-600">
+                    📅 สร้างเมื่อ: {new Date(editingProduct.createdAt).toLocaleDateString('th-TH')}
+                  </div>
+                )}
                 <button
                   onClick={() => {
                     setIsEditing(false);
@@ -402,20 +430,21 @@ const AdminPanel = () => {
                   <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">ราคา</th>
                   <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">สภาพ</th>
                   <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">สต็อก</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">วันที่สร้าง</th>
                   <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">จัดการ</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {products.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50 transition">
+                  <tr key={product._id} className="hover:bg-gray-50 transition">
                     <td className="px-6 py-4">
                       <div className="relative inline-block">
                         <img
-                          src={product.images[0]}
+                          src={product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/64?text=No+Image'}
                           alt={product.name}
                           className="w-16 h-16 rounded-lg object-cover shadow"
                         />
-                        {product.images.length > 1 && (
+                        {product.images && product.images.length > 1 && (
                           <div className="absolute -bottom-1 -right-1 bg-indigo-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                             {product.images.length}
                           </div>
@@ -436,6 +465,9 @@ const AdminPanel = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-700">{product.stock}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      📅 {new Date(product.createdAt).toLocaleDateString('th-TH')}
+                    </td>
                     <td className="px-6 py-4">
                       <div className="flex space-x-2">
                         <button
@@ -446,7 +478,7 @@ const AdminPanel = () => {
                           <Edit2 size={18} />
                         </button>
                         <button
-                          onClick={() => setShowDeleteConfirm(product.id)}
+                          onClick={() => setShowDeleteConfirm(product._id)}
                           className="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg transition"
                           title="ลบ"
                         >
