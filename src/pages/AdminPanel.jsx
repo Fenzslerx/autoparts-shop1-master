@@ -23,7 +23,7 @@ const AdminPanel = () => {
     price: '',
     condition: '',
     carModel: '',
-    image: '',
+    images: [],
     description: '',
     stock: '',
     category: ''
@@ -73,7 +73,7 @@ const AdminPanel = () => {
       price: '',
       condition: '',
       carModel: '',
-      image: '',
+      images: [],
       description: '',
       stock: '',
       category: ''
@@ -250,7 +250,7 @@ const AdminPanel = () => {
                   price: '',
                   condition: '',
                   carModel: '',
-                  image: '',
+                  images: [],
                   description: '',
                   stock: '',
                   category: ''
@@ -355,14 +355,18 @@ const AdminPanel = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">URL รูปภาพ</label>
-                  <input
-                    type="text"
-                    value={productForm.image}
-                    onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">URL รูปภาพ (คั่นด้วยลูกน้ำ)</label>
+                  <textarea
+                    value={productForm.images.join(', ')}
+                    onChange={(e) => setProductForm({ 
+                      ...productForm, 
+                      images: e.target.value.split(',').map(url => url.trim()).filter(url => url)
+                    })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
-                    placeholder="https://example.com/image.jpg"
+                    placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+                    rows="3"
                   />
+                  <p className="text-xs text-gray-500 mt-2">กรอก URL รูปภาพหลายรูปโดยคั่นด้วยลูกน้ำ (,)</p>
                 </div>
 
                 <div className="md:col-span-2">
@@ -405,11 +409,18 @@ const AdminPanel = () => {
                 {products.map((product) => (
                   <tr key={product.id} className="hover:bg-gray-50 transition">
                     <td className="px-6 py-4">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-16 h-16 rounded-lg object-cover shadow"
-                      />
+                      <div className="relative inline-block">
+                        <img
+                          src={product.images[0]}
+                          alt={product.name}
+                          className="w-16 h-16 rounded-lg object-cover shadow"
+                        />
+                        {product.images.length > 1 && (
+                          <div className="absolute -bottom-1 -right-1 bg-indigo-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                            {product.images.length}
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="font-semibold text-gray-800">{product.name}</div>
