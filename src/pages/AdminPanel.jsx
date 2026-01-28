@@ -11,6 +11,7 @@ const AdminPanel = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   // ข้อมูล Admin (ในระบบจริงควรเก็บใน backend)
   const ADMIN_CREDENTIALS = {
@@ -380,6 +381,61 @@ const AdminPanel = () => {
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
                     placeholder="เช่น มีสินค้าพร้อมส่ง หรือ เหลือ 2 ชิ้น"
                   />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">อัปโหลดรูปภาพ</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none bg-white"
+                    onChange={async (e) => {
+                      const files = Array.from(e.target.files || []);
+                      if (!files.length) return;
+
+                      try {
+                        setUploading(true);
+                        const uploadedUrls = [];
+
+                        for (const file of files) {
+                          const formData = new FormData();
+                          formData.append('file', file);
+
+                          const res = await fetch('/api/files', {
+                            method: 'POST',
+                            body: formData,
+                          });
+
+                          if (!res.ok) {
+                            throw new Error('อัปโหลดรูปภาพไม่สำเร็จ');
+                          }
+
+                          const data = await res.json();
+                          if (data.url) {
+                            uploadedUrls.push(data.url);
+                          }
+                        }
+
+                        setProductForm((prev) => ({
+                          ...prev,
+                          images: [...(prev.images || []), ...uploadedUrls],
+                        }));
+                      } catch (error) {
+                        console.error(error);
+                        alert('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ');
+                      } finally {
+                        setUploading(false);
+                        e.target.value = '';
+                      }
+                    }}
+                  />
+                  {uploading && (
+                    <p className="text-xs text-indigo-600 mt-1">กำลังอัปโหลดรูปภาพ...</p>
+                  )}
+                  <p className="text-xs text-gray-500 mt-2">
+                    ระบบจะเก็บรูปภาพไว้ในฐานข้อมูล D2 ของ Cloudflare และแสดงเป็น URL อัตโนมัติ
+                  </p>
                 </div>
 
                 <div className="md:col-span-2">

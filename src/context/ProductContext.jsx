@@ -2,7 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const ProductContext = createContext();
 
-const API_URL = 'http://localhost:5005/api/products';
+// ใช้ path แบบ relative เพื่อให้ทำงานได้ทั้งบน dev และ Cloudflare Workers
+const API_URL = '/api/products';
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
