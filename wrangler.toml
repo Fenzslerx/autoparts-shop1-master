@@ -12,9 +12,9 @@ not_found_handling = "single-page-application"
 [[d1_databases]]
 binding = "DB_PRODUCTS"
 database_name = "autoparts-products"
-database_id = "YOUR_D1_DATABASE_ID_HERE"
+database_id = "4309528a-d490-483f-8afc-083bc5662468"
 
-[r2_buckets]
+[[r2_buckets]]
 binding = "R2_FILES"
 bucket_name = "autoparts-files"
 
