@@ -10,7 +10,11 @@ export const ProductProvider = ({ children }) => {
       price: '3,500',
       condition: 'สภาพดี 80%',
       carModel: 'Toyota Vios 2015-2018',
-      image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&h=300&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1493195671595-30a332807d62?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1554320291-bbee04a248e0?w=400&h=300&fit=crop'
+      ],
       description: 'กันชนหน้าแท้จากรถศูนย์ ไม่มีรอยแตก สีเดิมจากโรงงาน',
       stock: 'มีสินค้าพร้อมส่ง',
       category: 'ชิ้นส่วนภายนอก',
@@ -22,7 +26,10 @@ export const ProductProvider = ({ children }) => {
       price: '4,200',
       condition: 'สภาพดี 90%',
       carModel: 'Honda Civic 2016-2020',
-      image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=300&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1516156537038-1514a0c6ac60?w=400&h=300&fit=crop'
+      ],
       description: 'ไฟหน้าซ้าย ใสสะอาด ไม่มีรอยร้าว ทำงานปกติ',
       stock: 'เหลือ 2 ชิ้น',
       category: 'ไฟและไฟฟ้า',
@@ -34,7 +41,11 @@ export const ProductProvider = ({ children }) => {
       price: '8,500',
       condition: 'สภาพดีมาก 95%',
       carModel: 'รถทั่วไป PCD 5x114.3',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1452603457318-dff8a816f331?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop'
+      ],
       description: 'ล้อแม็กแท้ 17 นิ้ว ชุดละ 4 วง ไม่บิด ไม่ผิดรูป พร้อมใช้งาน',
       stock: 'มีสินค้าพร้อมส่ง',
       category: 'ล้อและยาง',
@@ -46,7 +57,10 @@ export const ProductProvider = ({ children }) => {
       price: '5,800',
       condition: 'สภาพดี 85%',
       carModel: 'Mazda 3 2014-2017',
-      image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1502877828148-ce6fafdd27d7?w=400&h=300&fit=crop'
+      ],
       description: 'เบาะคู่หน้า หนังแท้ ไม่ขาด ไม่ฉีก กลไกทำงานปกติ',
       stock: 'เหลือ 1 ชุด',
       category: 'ชิ้นส่วนภายใน',
@@ -58,7 +72,10 @@ export const ProductProvider = ({ children }) => {
       price: '1,800',
       condition: 'สภาพดี 90%',
       carModel: 'Isuzu D-Max 2012-2019',
-      image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1452603457318-dff8a816f331?w=400&h=300&fit=crop'
+      ],
       description: 'กระจกมองข้างขวา ไฟเลี้ยวทำงาน กระจกไม่แตก',
       stock: 'มีสินค้าพร้อมส่ง',
       category: 'กระจกและอุปกรณ์',
@@ -70,7 +87,10 @@ export const ProductProvider = ({ children }) => {
       price: '28,000',
       condition: 'ใช้งานได้ดี',
       carModel: 'Toyota Vios/Yaris 1.5L',
-      image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=400&h=300&fit=crop',
+      images: [
+        'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&h=300&fit=crop'
+      ],
       description: 'เครื่องยนต์ 1NZ ไมล์แท้ 80,000 กม. ทดสอบแล้วทำงานปกติ',
       stock: 'เหลือ 1 ตัว',
       category: 'เครื่องยนต์และเกียร์',

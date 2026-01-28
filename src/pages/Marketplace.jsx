@@ -6,6 +6,7 @@ import headerImage from '../assets/image/476084784_1374712393879277_393782465698
 const Marketplace = () => {
   const { products } = useContext(ProductContext);
   const [selectedPart, setSelectedPart] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [viewMode, setViewMode] = useState('grid');
@@ -186,10 +187,15 @@ const Marketplace = () => {
                   {/* List View */}
                   <div className="relative overflow-hidden w-40 flex-shrink-0">
                     <img
-                      src={part.image}
+                      src={part.images[0]}
                       alt={part.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
+                    {part.images.length > 1 && (
+                      <div className="absolute top-2 left-2 bg-indigo-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                        {part.images.length} รูป
+                      </div>
+                    )}
                   </div>
                   <div className="flex-1 p-5 flex flex-col justify-between">
                     <div>
@@ -236,10 +242,22 @@ const Marketplace = () => {
                   {/* Grid View */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={part.image}
+                      src={part.images[0]}
                       alt={part.name}
                       className="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-300"
                     />
+                    {part.images.length > 1 && (
+                      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                        {part.images.map((_, idx) => (
+                          <div
+                            key={idx}
+                            className={`w-2 h-2 rounded-full ${
+                              idx === 0 ? 'bg-white' : 'bg-white/60'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
                     <div className="absolute top-3 right-3 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                       {part.condition}
                     </div>
@@ -366,19 +384,78 @@ const Marketplace = () => {
             className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative">
+            {/* Image Gallery */}
+            <div className="relative bg-gray-900">
               <img
-                src={selectedPart.image}
+                src={selectedPart.images[selectedImageIndex]}
                 alt={selectedPart.name}
                 className="w-full h-80 object-cover"
               />
+              
+              {/* Navigation Buttons */}
+              {selectedPart.images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedImageIndex((prev) => 
+                        prev === 0 ? selectedPart.images.length - 1 : prev - 1
+                      );
+                    }}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition"
+                  >
+                    <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedImageIndex((prev) => 
+                        prev === selectedPart.images.length - 1 ? 0 : prev + 1
+                      );
+                    }}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition"
+                  >
+                    <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </>
+              )}
+
+              {/* Close Button */}
               <button
-                onClick={() => setSelectedPart(null)}
+                onClick={() => {
+                  setSelectedPart(null);
+                  setSelectedImageIndex(0);
+                }}
                 className="absolute top-4 right-4 bg-white rounded-full p-3 shadow-2xl hover:bg-gray-100 transition"
               >
                 <X size={24} className="text-gray-700" />
               </button>
-              <div className="absolute bottom-4 left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full font-bold shadow-lg">
+
+              {/* Image Indicators */}
+              {selectedPart.images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                  {selectedPart.images.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImageIndex(idx);
+                      }}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        idx === selectedImageIndex 
+                          ? 'bg-white w-8' 
+                          : 'bg-white/60 hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <div className="absolute top-4 left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full font-bold shadow-lg">
                 {selectedPart.condition}
               </div>
             </div>
